@@ -1,4 +1,7 @@
 import * as THREE from 'https://cdn.skypack.dev/three';
+import { setupParcelInteraction } from './parcel.js';
+
+setupParcelInteraction(renderer, camera, scene);
 
 let raycaster = new THREE.Raycaster();
 let mouse = new THREE.Vector2();
