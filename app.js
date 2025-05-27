@@ -10,6 +10,15 @@ const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('tron
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
+// Tambah Ambient Light
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.5); // warna putih, intensiti 0.5
+scene.add(ambientLight);
+
+// Tambah Point Light untuk sorotan
+const pointLight = new THREE.PointLight(0xffffff, 1);
+pointLight.position.set(10, 50, 50);
+scene.add(pointLight);
+
 // Lampu biru neon
 const ambientLight = new THREE.AmbientLight(0x00ffff, 0.5);
 scene.add(ambientLight);
