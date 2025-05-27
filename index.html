@@ -1,16 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>TRONCITY WORLD</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Pastikan canvas fullscreen dan tiada margin */
+    html, body {
+      margin: 0; padding: 0; height: 100%; overflow: hidden;
+      background-color: black;
+      font-family: monospace;
+      color: cyan;
+    }
+    #tronCanvas {
+      display: block;
+      width: 100vw;
+      height: 100vh;
+      touch-action: none; /* bagus untuk mobile touch */
+      background-color: black;
+    }
+    #parcelInfo {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: rgba(0, 255, 255, 0.1);
+      padding: 10px;
+      color: cyan;
+      font-family: monospace;
+      z-index: 10;
+      user-select: none;
+    }
+  </style>
 </head>
 <body>
   <canvas id="tronCanvas"></canvas>
-  <div id="parcelInfo"
-     style="position:absolute;top:20px;left:20px;background:rgba(0,255,255,0.1);
-            padding:10px;color:cyan;font-family:monospace;z-index:10;">
-</div>
+  <div id="parcelInfo"></div>
+
   <script type="module" src="app.js"></script>
   <script type="module" src="parcel.js"></script>
 </body>
