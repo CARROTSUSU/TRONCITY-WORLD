@@ -3,15 +3,21 @@ import { Lensflare, LensflareElement } from 'https://cdn.skypack.dev/three/examp
 
 // === Setup Scene ===
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x000000);
+// Guna clear color, bukan sphere besar
+scene.background = null;
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.set(0, 30, 50);
 camera.lookAt(0, 0, 0);
 
 const canvas = document.getElementById('tronCanvas');
-const renderer = new THREE.WebGLRenderer({ canvas });
-renderer.setSize(window.innerWidth, window.innerHeight);
+// Matikan antialias
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: false });
+// Kurangkan resolusi renderer untuk mobile
+const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+const scaleFactor = isMobile ? 0.5 : 1;
+renderer.setSize(window.innerWidth * scaleFactor, window.innerHeight * scaleFactor, false);
+renderer.setPixelRatio(window.devicePixelRatio * scaleFactor);
 
 // === Audio Guruh ===
 const listener = new THREE.AudioListener();
@@ -25,18 +31,18 @@ audioLoader.load('https://cdn.pixabay.com/download/audio/2022/03/16/audio_1461d3
   thunderSound.setVolume(0.8);
 });
 
-// === Langit Tron ===
-const skyGeometry = new THREE.SphereGeometry(500, 32, 32);
-const skyMaterial = new THREE.MeshBasicMaterial({ color: 0x001144, side: THREE.BackSide });
-const sky = new THREE.Mesh(skyGeometry, skyMaterial);
-scene.add(sky);
+// === Langit Neon ===
+// Guna clear color sebagai latar
+renderer.setClearColor(new THREE.Color(0x001144));
 
 // === Awan Hologram ===
+// Kurangkan awan kepada 10 untuk mobile
+const cloudCount = isMobile ? 10 : 25;
 const cloudTexture = new THREE.TextureLoader().load('https://i.ibb.co/vPDX9DW/clouds.png');
 const cloudMaterial = new THREE.SpriteMaterial({ map: cloudTexture, color: 0x00ffff, transparent: true, opacity: 0.15 });
 const clouds = [];
 
-for (let i = 0; i < 25; i++) {
+for (let i = 0; i < cloudCount; i++) {
   const cloud = new THREE.Sprite(cloudMaterial.clone());
   cloud.position.set(Math.random() * 200 - 100, 40 + Math.random() * 20, Math.random() * 200 - 100);
   cloud.scale.set(80, 80, 1);
@@ -63,6 +69,12 @@ const lensflare = new Lensflare();
 lensflare.addElement(new LensflareElement(flareTexture, 150, 0));
 lightning.add(lensflare);
 
+// Matikan efek berat untuk mobile
+if (isMobile) {
+  lightning.intensity = 0;
+  lensflare.visible = false;
+}
+
 // === Grid Tron ===
 const gridHelper = new THREE.GridHelper(100, 20, 0x00ffff, 0x00ffff);
 scene.add(gridHelper);
@@ -77,7 +89,7 @@ scene.add(floor);
 // === Petir Flash Control ===
 let flashTime = 0;
 function triggerLightning() {
-  if (Math.random() < 0.01) {
+  if (!isMobile && Math.random() < 0.01) {
     lightning.intensity = 5 + Math.random() * 5;
     flashTime = 5;
 
