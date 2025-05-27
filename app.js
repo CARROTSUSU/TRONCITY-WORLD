@@ -160,3 +160,8 @@ function setupPC() {
   }
   animatePC();
 }
+window.addEventListener('resize', () => {
+  renderer.setSize(window.innerWidth * scaleFactor, window.innerHeight * scaleFactor);
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+});
